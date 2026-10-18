@@ -109,8 +109,10 @@
     s = R(s, 'root', (a) => `((${a[1]})^(1/(${a[0]})))`, 2);
     s = R(s, 'logb', (a) => `(ln(${a[1]})/ln(${a[0]}))`, 2);
     s = R(s, 'cbrt', (a) => `((${a[0]})^(1/3))`, 1);
-    s = R(s, 'log', (a) => `log10(${a[0]})`, 1);
+    // log (أساس 10): نكتبها بحروف كبيرة مؤقتًا حتى لا تتداخل مع ln
+    s = R(s, 'log', (a) => `(LOG(${a[0]})/LOG(10))`, 1);
     s = R(s, 'ln', (a) => `log(${a[0]})`, 1);   // log في Nerdamer = اللوغاريتم الطبيعي
+    s = s.replace(/\bLOG\(/g, 'log(');
 
     if (mode === 'deg') {
       for (const f of ['sin', 'cos', 'tan'])
@@ -199,6 +201,14 @@
     return close(a, b) ? b : NaN;
   }
 
+  function fmtShow(x) {
+    if (x === Infinity) return '∞';
+    if (x === -Infinity) return '−∞';
+    if (Number.isNaN(x)) return '؟';
+    const r = Number(x.toPrecision(6));
+    return fmtReal(Math.abs(r - Math.round(r)) < 1e-4 ? Math.round(r) : r);
+  }
+
   function numericLimit(f, v, pt, dir) {
     let val;
     if (/^-?Infinity$/.test(pt)) {
@@ -223,13 +233,6 @@
       { label: 'النهاية (تقدير عددي)', text: fmtShow(val) },
       { label: 'تنبيه', text: 'النتيجة تقريبية، تأكدي منها بالطريقة المعتادة' },
     ];
-  }
-  function fmtShow(x) {
-    if (x === Infinity) return '∞';
-    if (x === -Infinity) return '−∞';
-    if (Number.isNaN(x)) return '؟';
-    const r = Number(x.toPrecision(6));
-    return fmtReal(Math.abs(r - Math.round(r)) < 1e-4 ? Math.round(r) : r);
   }
 
   // ------------------------------------------------ الأدوات المتقدمة
