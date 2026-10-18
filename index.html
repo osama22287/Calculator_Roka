@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SciCalc | حاسبة الثانوية العامة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=JetBrains+Mono:wght@500;700&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="top">
+    <div class="logo">∑ <b>SciCalc</b> <small>حاسبة الثانوية العامة</small></div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="calc">🧮 الآلة الحاسبة</button>
+      <button class="tab" data-tab="tools">📐 أدوات متقدمة</button>
+    </nav>
+  </header>
+
+  <div class="floaties"></div>
+
+  <section class="hero">
+    <div class="hero-badge">✨ حاسبة الثانوية العامة ✨</div>
+    <h1 class="hero-name"><span class="heart">💖</span><span class="nm"></span><span class="heart">💖</span></h1>
+    <p class="hero-msg" id="heroMsg"></p>
+  </section>
+
+  <main>
+    <!-- ================= الآلة الحاسبة ================= -->
+    <section id="calc-panel" class="panel active">
+      <div class="calc-wrap">
+        <div class="calc" id="calc">
+          <div class="brand"><span>SciCalc</span><span>fx-style · 2nd edition</span></div>
+
+          <div class="screen">
+            <div class="indicators">
+              <span id="indShift"></span><span id="indMode">D</span><span id="indSD"></span>
+            </div>
+            <input id="expr" dir="ltr" autocomplete="off" spellcheck="false" inputmode="none" placeholder="0">
+            <div id="result" class="result" dir="ltr"></div>
+          </div>
+
+          <div id="sciKeys" class="keys sci"></div>
+          <div id="numKeys" class="keys num"></div>
+        </div>
+
+        <aside class="history">
+          <div class="h-head"><h3>🕘 السجل</h3><button id="clearHist" class="link">مسح</button></div>
+          <ul id="histList"></ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= الأدوات المتقدمة ================= -->
+    <section id="tools-panel" class="panel">
+      <p class="hint">اكتبي الصيغ بالشكل: <code>x^2</code> ، <code>sqrt(x)</code> ، <code>sin(x)</code> ، <code>ln(x)</code> ، <code>pi</code> ، <code>e^x</code> — والتفاضل والتكامل بالراديان. أو استخدمي لوحة الرموز على الجنب.</p>
+
+      <div class="tools-layout">
+        <aside class="symbols" id="symPad"></aside>
+
+        <div class="cards">
+
+          <form class="tool card" data-tool="derivative">
+            <h3>المشتقة d/dx</h3>
+            <label>الدالة<input name="expr" dir="ltr" placeholder="x^3 + sin(x)" required></label>
+            <div class="row">
+              <label>المتغير<select name="var"><option>x</option><option>y</option><option>z</option><option>t</option></select></label>
+              <label>الرتبة<input name="order" type="number" min="1" max="5" value="1"></label>
+              <label>عند نقطة (اختياري)<input name="point" dir="ltr" placeholder="2"></label>
+            </div>
+            <button class="go">احسب</button><div class="out"></div>
+          </form>
+
+          <form class="tool card" data-tool="integral">
+            <h3>التكامل ∫</h3>
+            <label>الدالة<input name="expr" dir="ltr" placeholder="x^2 + 1" required></label>
+            <div class="row">
+              <label>المتغير<select name="var"><option>x</option><option>y</option><option>z</option><option>t</option></select></label>
+              <label>من (اختياري)<input name="a" dir="ltr" placeholder="0"></label>
+              <label>إلى (اختياري)<input name="b" dir="ltr" placeholder="pi"></label>
+            </div>
+            <button class="go">احسب</button><div class="out"></div>
+          </form>
+
+          <form class="tool card" data-tool="limit">
+            <h3>النهايات lim</h3>
+            <label>الدالة<input name="expr" dir="ltr" placeholder="sin(x)/x" required></label>
+            <div class="row">
+              <label>المتغير<select name="var"><option>x</option><option>y</option><option>z</option><option>t</option></select></label>
+              <label>عندما → <input name="point" dir="ltr" placeholder="0  أو  oo" required></label>
+              <label>الاتجاه<select name="dir"><option value="+-">من الجهتين</option><option value="+">من اليمين +</option><option value="-">من اليسار −</option></select></label>
+            </div>
+            <button class="go">احسب</button><div class="out"></div>
+          </form>
+
+          <form class="tool card" data-tool="solve">
+            <h3>حل المعادلات</h3>
+            <label>معادلة أو أكثر (افصلي بينها بـ ; أو سطر جديد)
+              <textarea name="expr" dir="ltr" rows="3" placeholder="x^2 - 5x + 6 = 0&#10;أو: x + y = 5 ; x - y = 1" required></textarea></label>
+            <button class="go">حل</button><div class="out"></div>
+          </form>
+
+          <form class="tool card" data-tool="quadratic">
+            <h3>المعادلة التربيعية ax²+bx+c</h3>
+            <div class="row">
+              <label>a<input name="a" dir="ltr" value="1"></label>
+              <label>b<input name="b" dir="ltr" value="-5"></label>
+              <label>c<input name="c" dir="ltr" value="6"></label>
+            </div>
+            <button class="go">احسب</button><div class="out"></div>
+          </form>
+
+          <form class="tool card" data-tool="algebra">
+            <h3>تحليل / نشر / تبسيط</h3>
+            <label>المقدار<input name="expr" dir="ltr" placeholder="x^2 - 9" required></label>
+            <label>العملية<select name="op"><option value="factor">تحليل</option><option value="expand">نشر</option><option value="simplify">تبسيط</option></select></label>
+            <button class="go">نفّذ</button><div class="out"></div>
+          </form>
+
+          <form class="tool card" data-tool="stats">
+            <h3>الإحصاء</h3>
+            <label>البيانات (مفصولة بفواصل أو مسافات)
+              <textarea name="data" dir="ltr" rows="3" placeholder="5, 7, 7, 9, 12" required></textarea></label>
+            <button class="go">احسب</button><div class="out"></div>
+          </form>
+
+        </div>   <!-- يقفل cards -->
+      </div>     <!-- يقفل tools-layout -->
+    </section>   <!-- يقفل tools-panel -->
+  </main>
+
+  <footer class="foot">راجعي النتائج دائمًا مع كتاب المدرسة والمدرس ✔️</footer>
+
+  <!-- مكتبة الحساب الرمزي (تحتاج إنترنت أول مرة) -->
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Extra.js"></script>
+
+  <script src="config.js"></script>
+  <script src="engine.js"></script>
+  <script src="script.js"></script>
+  <script src="extras.js"></script>
+</body>
+</html>

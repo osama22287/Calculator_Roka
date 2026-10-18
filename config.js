@@ -1,0 +1,1 @@
+window.STUDENT_NAME = "رحمه أسامه ( Roka ) ";
